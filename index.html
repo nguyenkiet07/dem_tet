@@ -13,7 +13,6 @@
             --accent-color: #ffd700;
         }
 
-        /* Chế độ Ban đêm (Tính năng số 5) */
         .dark-mode {
             --bg-color: radial-gradient(circle, #2c3e50, #000000);
             --text-color: #ecf0f1;
@@ -25,7 +24,7 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             background: var(--bg-color);
             color: var(--text-color);
             display: flex;
@@ -33,86 +32,80 @@
             align-items: center;
             min-height: 100vh;
             text-align: center;
+            overflow: hidden; /* Để hoa rơi không tạo thanh cuộn */
             transition: background 0.5s ease;
         }
 
         .container {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 2px solid var(--accent-color);
+            background: rgba(0, 0, 0, 0.4);
+            padding: 40px 20px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            border: 3px solid var(--accent-color);
             width: 90%;
-            max-width: 500px;
+            max-width: 550px;
+            z-index: 10;
+            position: relative;
         }
 
-        h1 {
-            font-size: 2em;
-            margin-bottom: 20px;
-            color: var(--accent-color);
-        }
+        h1 { font-size: 2.2em; margin-bottom: 25px; color: var(--accent-color); text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
 
-        #countdown {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 30px;
-        }
+        #countdown { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; }
 
         .time-box {
             background: var(--box-bg);
             color: var(--box-text);
-            padding: 10px;
-            border-radius: 10px;
+            padding: 15px 10px;
+            border-radius: 15px;
             flex: 1;
-            transition: all 0.3s ease;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
         }
 
-        .time-box span {
-            display: block;
-            font-size: 1.5em;
-            font-weight: bold;
-        }
+        .time-box span { display: block; font-size: 1.8em; font-weight: bold; }
+        .label { font-size: 0.75em; text-transform: uppercase; font-weight: bold; opacity: 0.9; }
 
-        .label { font-size: 0.7em; text-transform: uppercase; opacity: 0.8; }
-
-        /* Nút bấm (Tính năng số 3 & 4) */
-        .controls {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
+        .controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
 
         button {
-            padding: 10px 15px;
+            padding: 12px 20px;
             border: none;
             border-radius: 50px;
             cursor: pointer;
             font-weight: bold;
             background: var(--accent-color);
             color: #b30000;
-            transition: transform 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: all 0.2s;
         }
 
-        button:hover { transform: scale(1.1); }
+        button:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.4); }
 
         #wish-display {
-            margin-top: 20px;
+            margin: 20px 0;
             padding: 15px;
-            min-height: 50px;
             font-style: italic;
-            background: rgba(255, 255, 255, 0.1);
+            font-size: 1.1em;
+            background: rgba(255, 255, 255, 0.15);
             border-radius: 10px;
             display: none;
         }
+
+        /* Hiệu ứng hoa rơi */
+        .petal {
+            position: fixed;
+            top: -10%;
+            z-index: 1;
+            user-select: none;
+            cursor: default;
+            animation: fall linear forwards;
+        }
+        @keyframes fall { to { transform: translateY(110vh) rotate(540deg); } }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1 id="header-title">Tết Ất Tỵ 2026</h1>
+        <h1>Tết Ất Tỵ 2026</h1>
         
         <div id="countdown">
             <div class="time-box"><span id="days">00</span><div class="label">Ngày</div></div>
@@ -125,243 +118,65 @@
 
         <div class="controls">
             <button onclick="getNewWish()">🧧 Nhận Lời Chúc</button>
-            <button id="music-btn" onclick="toggleMusic()">🎵 Bật Nhạc</button>
-            <button onclick="toggleTheme()">🌗 Đổi Giao Diện</button>
+            <button id="music-btn" onclick="toggleMusic()">🎵 Nhạc Xuân</button>
+            <button onclick="toggleTheme()">🌗 Giao Diện</button>
         </div>
     </div>
 
     <audio id="bg-music" loop>
-        <source src="https://www.bensound.com/bensound-music/bensound-ukulele.mp3" type="audio/mpeg">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-        // 1. Cấu hình Đếm ngược
+        // 1. Đếm ngược
         const tetDate = new Date("Feb 17, 2026 00:00:00").getTime();
-        setInterval(function() {
+        function updateTimer() {
             const now = new Date().getTime();
             const distance = tetDate - now;
+            if (distance < 0) return;
+
             document.getElementById("days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
             document.getElementById("hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             document.getElementById("minutes").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             document.getElementById("seconds").innerText = Math.floor((distance % (1000 * 60)) / 1000);
-        }, 1000);
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
 
-        // 2. Tính năng số 3: Lời chúc ngẫu nhiên
+        // 2. Lời chúc
         const wishes = [
             "Chúc mừng năm mới! Vạn sự như ý, tỷ sự như mơ!",
             "Chúc bạn năm mới công việc hanh thông, học tập tiến tới!",
-            "Tết đến xuân về, chúc gia đình bạn luôn bình an và hạnh phúc!",
-            "Chúc bạn code không bug, chạy dự án nào cũng thành công!",
-            "Tiền vào như nước sông Đà, tiền ra nhỏ giọt như cà phê phin!"
+            "Tết đến xuân về, chúc gia đình bạn luôn bình an!",
+            "Chúc bạn code không bug, mọi dự án đều thành công!",
+            "Năm mới phát tài, tiền vào như nước, tiền ra nhỏ giọt!"
         ];
-
         function getNewWish() {
             const display = document.getElementById("wish-display");
-            const randomWish = wishes[Math.floor(Math.random() * wishes.length)];
-            display.innerText = randomWish;
+            display.innerText = wishes[Math.floor(Math.random() * wishes.length)];
             display.style.display = "block";
-            display.style.animation = "fadeIn 0.5s";
         }
 
-        // 3. Tính năng số 4: Bật/Tắt nhạc
+        // 3. Nhạc & Giao diện
         const music = document.getElementById("bg-music");
         function toggleMusic() {
-            if (music.paused) {
-                music.play();
-                document.getElementById("music-btn").innerText = "🔇 Tắt Nhạc";
-            } else {
-                music.pause();
-                document.getElementById("music-btn").innerText = "🎵 Bật Nhạc";
-            }
+            if (music.paused) { music.play(); document.getElementById("music-btn").innerText = "🔇 Tắt Nhạc"; }
+            else { music.pause(); document.getElementById("music-btn").innerText = "🎵 Nhạc Xuân"; }
         }
+        function toggleTheme() { document.body.classList.toggle("dark-mode"); }
 
-        // 4. Tính năng số 5: Đổi giao diện
-        function toggleTheme() {
-            document.body.classList.toggle("dark-mode");
+        // 4. Hiệu ứng hoa rơi
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            petal.innerText = Math.random() > 0.5 ? '🌸' : '🟡'; 
+            petal.style.left = Math.random() * 100 + 'vw';
+            petal.style.animationDuration = Math.random() * 3 + 4 + 's';
+            petal.style.fontSize = Math.random() * 10 + 15 + 'px';
+            document.body.appendChild(petal);
+            setTimeout(() => petal.remove(), 7000);
         }
-    </script>
-</body>
-</html><!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đếm Ngược Tết Ất Tỵ 2026</title>
-    <style>
-        :root {
-            --bg-color: radial-gradient(circle, #ff4d4d, #b30000);
-            --text-color: white;
-            --box-bg: #fff;
-            --box-text: #b30000;
-            --accent-color: #ffd700;
-        }
-
-        /* Chế độ Ban đêm (Tính năng số 5) */
-        .dark-mode {
-            --bg-color: radial-gradient(circle, #2c3e50, #000000);
-            --text-color: #ecf0f1;
-            --box-bg: #c0392b;
-            --box-text: #ffd700;
-            --accent-color: #f1c40f;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            text-align: center;
-            transition: background 0.5s ease;
-        }
-
-        .container {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 2px solid var(--accent-color);
-            width: 90%;
-            max-width: 500px;
-        }
-
-        h1 {
-            font-size: 2em;
-            margin-bottom: 20px;
-            color: var(--accent-color);
-        }
-
-        #countdown {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 30px;
-        }
-
-        .time-box {
-            background: var(--box-bg);
-            color: var(--box-text);
-            padding: 10px;
-            border-radius: 10px;
-            flex: 1;
-            transition: all 0.3s ease;
-        }
-
-        .time-box span {
-            display: block;
-            font-size: 1.5em;
-            font-weight: bold;
-        }
-
-        .label { font-size: 0.7em; text-transform: uppercase; opacity: 0.8; }
-
-        /* Nút bấm (Tính năng số 3 & 4) */
-        .controls {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            background: var(--accent-color);
-            color: #b30000;
-            transition: transform 0.2s;
-        }
-
-        button:hover { transform: scale(1.1); }
-
-        #wish-display {
-            margin-top: 20px;
-            padding: 15px;
-            min-height: 50px;
-            font-style: italic;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            display: none;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <h1 id="header-title">Tết Ất Tỵ 2026</h1>
-        
-        <div id="countdown">
-            <div class="time-box"><span id="days">00</span><div class="label">Ngày</div></div>
-            <div class="time-box"><span id="hours">00</span><div class="label">Giờ</div></div>
-            <div class="time-box"><span id="minutes">00</span><div class="label">Phút</div></div>
-            <div class="time-box"><span id="seconds">00</span><div class="label">Giây</div></div>
-        </div>
-
-        <div id="wish-display"></div>
-
-        <div class="controls">
-            <button onclick="getNewWish()">🧧 Nhận Lời Chúc</button>
-            <button id="music-btn" onclick="toggleMusic()">🎵 Bật Nhạc</button>
-            <button onclick="toggleTheme()">🌗 Đổi Giao Diện</button>
-        </div>
-    </div>
-
-    <audio id="bg-music" loop>
-        <source src="https://www.bensound.com/bensound-music/bensound-ukulele.mp3" type="audio/mpeg">
-    </audio>
-
-    <script>
-        // 1. Cấu hình Đếm ngược
-        const tetDate = new Date("Feb 17, 2026 00:00:00").getTime();
-        setInterval(function() {
-            const now = new Date().getTime();
-            const distance = tetDate - now;
-            document.getElementById("days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
-            document.getElementById("hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            document.getElementById("minutes").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            document.getElementById("seconds").innerText = Math.floor((distance % (1000 * 60)) / 1000);
-        }, 1000);
-
-        // 2. Tính năng số 3: Lời chúc ngẫu nhiên
-        const wishes = [
-            "Chúc mừng năm mới! Vạn sự như ý, tỷ sự như mơ!",
-            "Chúc bạn năm mới công việc hanh thông, học tập tiến tới!",
-            "Tết đến xuân về, chúc gia đình bạn luôn bình an và hạnh phúc!",
-            "Chúc bạn code không bug, chạy dự án nào cũng thành công!",
-            "Tiền vào như nước sông Đà, tiền ra nhỏ giọt như cà phê phin!"
-        ];
-
-        function getNewWish() {
-            const display = document.getElementById("wish-display");
-            const randomWish = wishes[Math.floor(Math.random() * wishes.length)];
-            display.innerText = randomWish;
-            display.style.display = "block";
-            display.style.animation = "fadeIn 0.5s";
-        }
-
-        // 3. Tính năng số 4: Bật/Tắt nhạc
-        const music = document.getElementById("bg-music");
-        function toggleMusic() {
-            if (music.paused) {
-                music.play();
-                document.getElementById("music-btn").innerText = "🔇 Tắt Nhạc";
-            } else {
-                music.pause();
-                document.getElementById("music-btn").innerText = "🎵 Bật Nhạc";
-            }
-        }
-
-        // 4. Tính năng số 5: Đổi giao diện
-        function toggleTheme() {
-            document.body.classList.toggle("dark-mode");
-        }
+        setInterval(createPetal, 400);
     </script>
 </body>
 </html>
