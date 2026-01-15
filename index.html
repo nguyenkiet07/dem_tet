@@ -22,30 +22,22 @@
         }
 
         body {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             font-family: 'Segoe UI', Arial, sans-serif;
             background: var(--bg-color);
             color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            text-align: center;
-            overflow: hidden; /* Để hoa rơi không tạo thanh cuộn */
-            transition: background 0.5s ease;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; text-align: center;
+            overflow: hidden; transition: background 0.5s ease;
         }
 
         .container {
             background: rgba(0, 0, 0, 0.4);
-            padding: 40px 20px;
-            border-radius: 25px;
+            padding: 40px 20px; border-radius: 25px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.6);
             border: 3px solid var(--accent-color);
-            width: 90%;
-            max-width: 550px;
-            z-index: 10;
-            position: relative;
+            width: 90%; max-width: 550px;
+            z-index: 10; position: relative;
         }
 
         h1 { font-size: 2.2em; margin-bottom: 25px; color: var(--accent-color); text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
@@ -53,11 +45,8 @@
         #countdown { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; }
 
         .time-box {
-            background: var(--box-bg);
-            color: var(--box-text);
-            padding: 15px 10px;
-            border-radius: 15px;
-            flex: 1;
+            background: var(--box-bg); color: var(--box-text);
+            padding: 15px 10px; border-radius: 15px; flex: 1;
             box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
         }
 
@@ -67,42 +56,31 @@
         .controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
 
         button {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            background: var(--accent-color);
-            color: #b30000;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            transition: all 0.2s;
+            padding: 12px 20px; border: none; border-radius: 50px;
+            cursor: pointer; font-weight: bold;
+            background: var(--accent-color); color: #b30000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s;
         }
 
         button:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.4); }
 
         #wish-display {
-            margin: 20px 0;
-            padding: 15px;
-            font-style: italic;
-            font-size: 1.1em;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-            display: none;
+            margin: 20px 0; padding: 15px; font-style: italic; font-size: 1.1em;
+            background: rgba(255, 255, 255, 0.15); border-radius: 10px; display: none;
         }
 
-        /* Hiệu ứng hoa rơi */
-        .petal {
-            position: fixed;
-            top: -10%;
-            z-index: 1;
-            user-select: none;
-            cursor: default;
-            animation: fall linear forwards;
-        }
+        .petal { position: fixed; top: -10%; z-index: 1; user-select: none; animation: fall linear forwards; }
         @keyframes fall { to { transform: translateY(110vh) rotate(540deg); } }
     </style>
 </head>
 <body>
+
+    <div style="display: none;">
+        <iframe id="youtube-player" 
+                src="https://www.youtube.com/embed/aK17qKcixZM?enablejsapi=1&loop=1&playlist=aK17qKcixZM" 
+                allow="autoplay">
+        </iframe>
+    </div>
 
     <div class="container">
         <h1>Tết Ất Tỵ 2026</h1>
@@ -123,10 +101,6 @@
         </div>
     </div>
 
-    <audio id="bg-music" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    </audio>
-
     <script>
         // 1. Đếm ngược
         const tetDate = new Date("Feb 17, 2026 00:00:00").getTime();
@@ -134,7 +108,6 @@
             const now = new Date().getTime();
             const distance = tetDate - now;
             if (distance < 0) return;
-
             document.getElementById("days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
             document.getElementById("hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             document.getElementById("minutes").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -157,15 +130,25 @@
             display.style.display = "block";
         }
 
-        // 3. Nhạc & Giao diện
-        const music = document.getElementById("bg-music");
+        // 3. Điều khiển nhạc YouTube
+        let isPlaying = false;
         function toggleMusic() {
-            if (music.paused) { music.play(); document.getElementById("music-btn").innerText = "🔇 Tắt Nhạc"; }
-            else { music.pause(); document.getElementById("music-btn").innerText = "🎵 Nhạc Xuân"; }
+            const player = document.getElementById("youtube-player");
+            const btn = document.getElementById("music-btn");
+            if (!isPlaying) {
+                player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                btn.innerText = "🔇 Tắt Nhạc";
+                isPlaying = true;
+            } else {
+                player.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                btn.innerText = "🎵 Nhạc Xuân";
+                isPlaying = false;
+            }
         }
+
+        // 4. Giao diện & Hoa rơi
         function toggleTheme() { document.body.classList.toggle("dark-mode"); }
 
-        // 4. Hiệu ứng hoa rơi
         function createPetal() {
             const petal = document.createElement('div');
             petal.className = 'petal';
