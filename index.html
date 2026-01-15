@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <title>Đếm Ngược Tết Ất Tỵ 2026</title>
-    <meta name="description" content="Đồng hồ đếm ngược đến Tết Nguyên Đán Ất Tỵ 2026. Chúc mừng năm mới!">
+    <meta name="description" content="Đếm ngược đến Tết Nguyên Đán Ất Tỵ 2026. Chúc mừng năm mới!">
     <meta property="og:title" content="Đếm Ngược Tết Ất Tỵ 2026">
-    <meta property="og:description" content="Cùng chờ đón khoảnh khắc giao thừa 2026!.">
+    <meta property="og:description" content="Cùng chờ đón khoảnh khắc giao thừa 2026! Xem ngay đồng hồ đếm ngược.">
     <meta property="og:url" content="https://nguyenkiet07.github.io/dem_tet/">
-    <meta property="og:type" content="website">
     <meta property="og:image" content="https://nguyenkiet07.github.io/dem_tet/thumbnail.jpg">
-    
 
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
         :root {
@@ -25,7 +25,6 @@
             --box-glass: rgba(255, 255, 255, 0.1);
         }
 
-        /* Chế độ tối */
         .dark-mode {
             --bg-gradient: radial-gradient(circle at center, #2c3e50, #000000);
             --accent-color: #f1c40f;
@@ -44,7 +43,6 @@
             overflow: hidden; transition: background 0.5s ease;
         }
 
-        /* Container chính - Hiệu ứng Kính mờ, Không viền xanh */
         .container {
             background: var(--glass-bg);
             backdrop-filter: blur(15px);
@@ -57,21 +55,18 @@
             margin-bottom: 20px;
         }
 
-        h1 { font-size: 2.2em; font-weight: 800; margin-bottom: 35px; color: var(--accent-color); text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        h1 { font-size: 2.2em; font-weight: 800; margin-bottom: 35px; color: var(--accent-color); }
 
-        /* Đồng hồ đếm ngược */
         #countdown { display: flex; justify-content: center; gap: 12px; margin-bottom: 35px; }
 
         .time-box {
             background: var(--box-glass); border: 1px solid var(--glass-border);
             padding: 15px 5px; border-radius: 18px; flex: 1;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .time-box span { display: block; font-size: 1.8em; font-weight: 800; color: var(--accent-color); }
-        .label { font-size: 0.65em; text-transform: uppercase; font-weight: 600; margin-top: 5px; opacity: 0.8; letter-spacing: 1px; }
+        .label { font-size: 0.65em; text-transform: uppercase; font-weight: 600; margin-top: 5px; opacity: 0.8; }
 
-        /* Nút điều khiển */
         .controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
 
         button {
@@ -83,9 +78,7 @@
         }
 
         button:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4); }
-        .dark-mode button { color: #1a1a1a; }
 
-        /* Hiển thị lời chúc */
         #wish-display {
             margin: 25px 0; padding: 20px; font-style: italic; font-weight: 600;
             background: rgba(255, 255, 255, 0.1); border-radius: 15px; display: none;
@@ -94,16 +87,13 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Footer nhỏ gọn */
         footer {
             position: absolute; bottom: 15px; z-index: 10;
-            font-size: 0.75em; opacity: 0.6; letter-spacing: 0.5px;
+            font-size: 0.75em; opacity: 0.6;
         }
 
         footer a { color: var(--accent-color); text-decoration: none; font-weight: 600; }
-        footer a:hover { opacity: 1; text-decoration: underline; }
 
-        /* Hiệu ứng cánh hoa rơi */
         .petal { position: fixed; top: -10%; z-index: 1; user-select: none; animation: fall linear forwards; }
         @keyframes fall { to { transform: translateY(110vh) rotate(540deg); } }
     </style>
@@ -138,18 +128,15 @@
     </audio>
 
     <script>
-        // 1. Cấu hình thời gian Tết Ất Tỵ (17/02/2026)
         const tetDate = new Date("Feb 17, 2026 00:00:00").getTime();
 
         function updateTimer() {
             const now = new Date().getTime();
             const distance = tetDate - now;
-
             if (distance < 0) {
-                document.getElementById("countdown").innerHTML = "<h2 style='color:var(--accent-color)'>CHÚC MỪNG NĂM MỚI 2026!</h2>";
+                document.getElementById("countdown").innerHTML = "<h2>CHÚC MỪNG NĂM MỚI!</h2>";
                 return;
             }
-
             document.getElementById("days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
             document.getElementById("hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             document.getElementById("minutes").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -159,12 +146,11 @@
         setInterval(updateTimer, 1000);
         updateTimer();
 
-        // 2. Lời chúc ngẫu nhiên
         const wishes = [
-            "Chúc mừng năm mới! Vạn sự như ý, tỷ sự như mơ!",
-            "Chúc bạn năm mới học tập tốt, code giỏi, không bug!",
-            "Tết đến xuân về, gia đình bình an, hạnh phúc và tài lộc!",
-            "Chúc một năm mới tràn đầy năng lượng và đạt được mọi mục tiêu!",
+            "Chúc mừng năm mới! Vạn sự như ý!",
+            "Code không bug, deadline không trễ, điểm A đầy bảng!",
+            "Tết đến xuân về, gia đình bình an, hạnh phúc!",
+            "Chúc bạn một năm mới bùng nổ và thành công!",
             "Tiền vào như nước sông Đà, tiền ra nhỏ giọt như cà phê phin!"
         ];
 
@@ -172,13 +158,20 @@
             const display = document.getElementById("wish-display");
             display.innerText = wishes[Math.floor(Math.random() * wishes.length)];
             display.style.display = "block";
+
+            // Bắn pháo hoa khi nhấn nút
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ffd700', '#ff4d4d', '#ffffff']
+            });
         }
 
-        // 3. Trình phát nhạc
         const music = document.getElementById("bg-music");
         function toggleMusic() {
             if (music.paused) { 
-                music.play().catch(() => alert("Bạn cần tương tác với trang web trước khi bật nhạc!"));
+                music.play().catch(() => alert("Tương tác với trang web trước khi bật nhạc!"));
                 document.getElementById("music-btn").innerText = "🔇 Tắt Nhạc"; 
             }
             else { 
@@ -187,23 +180,20 @@
             }
         }
 
-        // 4. Đổi giao diện
         function toggleTheme() { document.body.classList.toggle("dark-mode"); }
 
-        // 5. Hiệu ứng cánh hoa/bao lì xì rơi
         function createPetal() {
             const petal = document.createElement('div');
             petal.className = 'petal';
-            const icons = ['🌸', '🌼', '🧧', '🏮'];
+            const icons = ['🌸', '🌼', '🧧'];
             petal.innerText = icons[Math.floor(Math.random() * icons.length)]; 
             petal.style.left = Math.random() * 100 + 'vw';
             petal.style.animationDuration = (Math.random() * 3 + 4) + 's';
             petal.style.fontSize = (Math.random() * 10 + 15) + 'px';
-            petal.style.opacity = Math.random();
             document.body.appendChild(petal);
             setTimeout(() => petal.remove(), 7000);
         }
-        setInterval(createPetal, 400);
+        setInterval(createPetal, 500);
     </script>
 </body>
 </html>
