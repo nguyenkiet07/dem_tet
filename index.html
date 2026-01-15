@@ -96,7 +96,7 @@
 
         <div class="controls">
             <button onclick="getNewWish()">🧧 Nhận Lời Chúc</button>
-            <button id="music-btn" onclick="toggleMusic()">🎵 Nhạc Xuân</button>
+            <button id="music-btn" onclick="toggleMusic()">🎵 Sound</button>
             <button onclick="toggleTheme()">🌗 Giao Diện</button>
         </div>
     </div>
@@ -137,11 +137,11 @@
             const btn = document.getElementById("music-btn");
             if (!isPlaying) {
                 player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-                btn.innerText = "🔇 Tắt Nhạc";
+                btn.innerText = "🔇 Mute";
                 isPlaying = true;
             } else {
                 player.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-                btn.innerText = "🎵 Nhạc Xuân";
+                btn.innerText = "🎵 Sound";
                 isPlaying = false;
             }
         }
