@@ -5,14 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <title>Đếm Ngược Tết Ất Tỵ 2026</title>
-    <meta name="description" content="Đếm ngược đến Tết Nguyên Đán Ất Tỵ 2026. Chúc mừng năm mới!">
+    <meta name="description" content="Đếm ngược Tết 2026">
     <meta property="og:title" content="Đếm Ngược Tết Ất Tỵ 2026">
-    <meta property="og:description" content="Cùng chờ đón khoảnh khắc giao thừa 2026! Xem ngay đồng hồ đếm ngược.">
-    <meta property="og:url" content="https://nguyenkiet07.github.io/dem_tet/">
     <meta property="og:image" content="https://nguyenkiet07.github.io/dem_tet/thumbnail.jpg">
 
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
-    
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
@@ -46,52 +43,51 @@
         .container {
             background: var(--glass-bg);
             backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            padding: 45px 30px; border-radius: 30px;
+            padding: 40px 25px; border-radius: 30px;
             border: 1px solid var(--glass-border);
             box-shadow: 0 25px 50px rgba(0,0,0,0.4);
             width: 90%; max-width: 500px;
             z-index: 10; position: relative;
-            margin-bottom: 20px;
         }
 
-        h1 { font-size: 2.2em; font-weight: 800; margin-bottom: 35px; color: var(--accent-color); }
+        h1 { font-size: 2em; font-weight: 800; margin-bottom: 25px; color: var(--accent-color); }
 
-        #countdown { display: flex; justify-content: center; gap: 12px; margin-bottom: 35px; }
-
+        /* Đồng hồ đếm ngược */
+        #countdown { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; }
         .time-box {
             background: var(--box-glass); border: 1px solid var(--glass-border);
-            padding: 15px 5px; border-radius: 18px; flex: 1;
+            padding: 12px 5px; border-radius: 15px; flex: 1;
+        }
+        .time-box span { display: block; font-size: 1.6em; font-weight: 800; color: var(--accent-color); }
+        .label { font-size: 0.6em; text-transform: uppercase; font-weight: 600; opacity: 0.8; }
+
+        /* KHU VỰC XỔ SỐ 4 SỐ */
+        .lottery-section {
+            margin: 20px 0; padding: 20px;
+            background: rgba(0, 0, 0, 0.2); border-radius: 20px;
+            border: 1px dashed var(--accent-color);
+        }
+        .lottery-title { font-size: 0.9em; font-weight: 600; margin-bottom: 15px; color: var(--accent-color); }
+        .slots { display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; }
+        .slot {
+            width: 50px; height: 60px; background: #fff; color: #b30000;
+            font-size: 2em; font-weight: 800; display: flex;
+            align-items: center; justify-content: center; border-radius: 10px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
         }
 
-        .time-box span { display: block; font-size: 1.8em; font-weight: 800; color: var(--accent-color); }
-        .label { font-size: 0.65em; text-transform: uppercase; font-weight: 600; margin-top: 5px; opacity: 0.8; }
-
-        .controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
-
+        /* Nút điều khiển */
+        .controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
         button {
-            padding: 12px 20px; border: none; border-radius: 50px;
+            padding: 10px 18px; border: none; border-radius: 50px;
             cursor: pointer; font-weight: 600; font-family: 'Montserrat', sans-serif;
             background: linear-gradient(45deg, var(--accent-color), #ffecb3);
-            color: #8e0000; box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
-            transition: all 0.3s ease; font-size: 0.9em;
+            color: #8e0000; transition: all 0.3s ease; font-size: 0.85em;
         }
+        button:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4); }
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        button:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4); }
-
-        #wish-display {
-            margin: 25px 0; padding: 20px; font-style: italic; font-weight: 600;
-            background: rgba(255, 255, 255, 0.1); border-radius: 15px; display: none;
-            border-left: 4px solid var(--accent-color); animation: fadeIn 0.6s ease;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        footer {
-            position: absolute; bottom: 15px; z-index: 10;
-            font-size: 0.75em; opacity: 0.6;
-        }
-
+        footer { position: absolute; bottom: 15px; z-index: 10; font-size: 0.75em; opacity: 0.6; }
         footer a { color: var(--accent-color); text-decoration: none; font-weight: 600; }
 
         .petal { position: fixed; top: -10%; z-index: 1; user-select: none; animation: fall linear forwards; }
@@ -110,10 +106,19 @@
             <div class="time-box"><span id="seconds">00</span><div class="label">Giây</div></div>
         </div>
 
-        <div id="wish-display"></div>
+        <div class="lottery-section">
+            <div class="lottery-title">✨ SỐ MAY MẮN ĐẦU XUÂN ✨</div>
+            <div class="slots">
+                <div class="slot" id="slot-1">0</div>
+                <div class="slot" id="slot-2">0</div>
+                <div class="slot" id="slot-3">0</div>
+                <div class="slot" id="slot-4">0</div>
+            </div>
+            <button id="spin-btn" onclick="startSpin()">🧧 Quay Số Hái Lộc</button>
+        </div>
 
         <div class="controls">
-            <button onclick="getNewWish()">🧧 Lời Chúc</button>
+            <button onclick="getNewWish()">💬 Lời Chúc</button>
             <button id="music-btn" onclick="toggleMusic()">🎵 Nhạc Xuân</button>
             <button onclick="toggleTheme()">🌗 Giao Diện</button>
         </div>
@@ -128,56 +133,67 @@
     </audio>
 
     <script>
+        // 1. Đếm ngược
         const tetDate = new Date("Feb 17, 2026 00:00:00").getTime();
-
         function updateTimer() {
             const now = new Date().getTime();
             const distance = tetDate - now;
-            if (distance < 0) {
-                document.getElementById("countdown").innerHTML = "<h2>CHÚC MỪNG NĂM MỚI!</h2>";
-                return;
-            }
+            if (distance < 0) return;
             document.getElementById("days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
             document.getElementById("hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             document.getElementById("minutes").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             document.getElementById("seconds").innerText = Math.floor((distance % (1000 * 60)) / 1000);
         }
-
         setInterval(updateTimer, 1000);
         updateTimer();
 
-        const wishes = [
-            "Chúc mừng năm mới! Vạn sự như ý!",
-            "Code không bug, deadline không trễ, điểm A đầy bảng!",
-            "Tết đến xuân về, gia đình bình an, hạnh phúc!",
-            "Chúc bạn một năm mới bùng nổ và thành công!",
-            "Tiền vào như nước sông Đà, tiền ra nhỏ giọt như cà phê phin!"
-        ];
+        // 2. LOGIC XỔ SỐ (QUAY SỐ)
+        let spinning = false;
+        function startSpin() {
+            if (spinning) return;
+            spinning = true;
+            const btn = document.getElementById("spin-btn");
+            btn.disabled = true;
+            btn.innerText = "⏳ Đang quay...";
 
+            let count = 0;
+            const duration = 40; // Tốc độ nhảy số
+            const totalSteps = 50; // Số bước nhảy trước khi dừng
+
+            const timer = setInterval(() => {
+                // Nhảy số ngẫu nhiên cho cả 4 ô
+                for (let i = 1; i <= 4; i++) {
+                    document.getElementById(`slot-${i}`).innerText = Math.floor(Math.random() * 10);
+                }
+                
+                count++;
+                if (count >= totalSteps) {
+                    clearInterval(timer);
+                    spinning = false;
+                    btn.disabled = false;
+                    btn.innerText = "🧧 Quay Số Hái Lộc";
+                    
+                    // Bắn pháo hoa khi dừng lại
+                    confetti({
+                        particleCount: 200,
+                        spread: 80,
+                        origin: { y: 0.6 }
+                    });
+                }
+            }, duration);
+        }
+
+        // 3. Lời chúc & Tiện ích khác
+        const wishes = ["Vạn sự như ý!", "Học tập tiến tới!", "Gia đình bình an!", "Phát tài phát lộc!", "Code không bug!"];
         function getNewWish() {
-            const display = document.getElementById("wish-display");
-            display.innerText = wishes[Math.floor(Math.random() * wishes.length)];
-            display.style.display = "block";
-
-            // Bắn pháo hoa khi nhấn nút
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#ffd700', '#ff4d4d', '#ffffff']
-            });
+            alert(wishes[Math.floor(Math.random() * wishes.length)]);
+            confetti({ particleCount: 50, spread: 50, origin: { y: 0.8 } });
         }
 
         const music = document.getElementById("bg-music");
         function toggleMusic() {
-            if (music.paused) { 
-                music.play().catch(() => alert("Tương tác với trang web trước khi bật nhạc!"));
-                document.getElementById("music-btn").innerText = "🔇 Tắt Nhạc"; 
-            }
-            else { 
-                music.pause(); 
-                document.getElementById("music-btn").innerText = "🎵 Nhạc Xuân"; 
-            }
+            if (music.paused) { music.play(); document.getElementById("music-btn").innerText = "🔇 Tắt Nhạc"; }
+            else { music.pause(); document.getElementById("music-btn").innerText = "🎵 Nhạc Xuân"; }
         }
 
         function toggleTheme() { document.body.classList.toggle("dark-mode"); }
@@ -189,7 +205,6 @@
             petal.innerText = icons[Math.floor(Math.random() * icons.length)]; 
             petal.style.left = Math.random() * 100 + 'vw';
             petal.style.animationDuration = (Math.random() * 3 + 4) + 's';
-            petal.style.fontSize = (Math.random() * 10 + 15) + 'px';
             document.body.appendChild(petal);
             setTimeout(() => petal.remove(), 7000);
         }
