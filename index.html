@@ -40,18 +40,17 @@
             z-index: 10; position: relative;
         }
 
-        h1 { font-size: 2.2em; margin-bottom: 25px; color: var(--accent-color); text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        h1 { font-size: 2.2em; margin-bottom: 25px; color: var(--accent-color); }
 
         #countdown { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; }
 
         .time-box {
             background: var(--box-bg); color: var(--box-text);
             padding: 15px 10px; border-radius: 15px; flex: 1;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
         }
 
         .time-box span { display: block; font-size: 1.8em; font-weight: bold; }
-        .label { font-size: 0.75em; text-transform: uppercase; font-weight: bold; opacity: 0.9; }
+        .label { font-size: 0.75em; text-transform: uppercase; font-weight: bold; }
 
         .controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
 
@@ -59,28 +58,24 @@
             padding: 12px 20px; border: none; border-radius: 50px;
             cursor: pointer; font-weight: bold;
             background: var(--accent-color); color: #b30000;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s;
+            transition: all 0.2s;
         }
 
-        button:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.4); }
+        button:hover { transform: translateY(-3px); }
 
         #wish-display {
-            margin: 20px 0; padding: 15px; font-style: italic; font-size: 1.1em;
+            margin: 20px 0; padding: 15px; font-style: italic;
             background: rgba(255, 255, 255, 0.15); border-radius: 10px; display: none;
         }
 
-        .petal { position: fixed; top: -10%; z-index: 1; user-select: none; animation: fall linear forwards; }
+        .petal {
+            position: fixed; top: -10%; z-index: 1;
+            user-select: none; animation: fall linear forwards;
+        }
         @keyframes fall { to { transform: translateY(110vh) rotate(540deg); } }
     </style>
 </head>
 <body>
-
-    <div style="display: none;">
-        <iframe id="youtube-player" 
-                src="https://www.youtube.com/embed/aK17qKcixZM?enablejsapi=1&loop=1&playlist=aK17qKcixZM" 
-                allow="autoplay">
-        </iframe>
-    </div>
 
     <div class="container">
         <h1>Tết Ất Tỵ 2026</h1>
@@ -96,10 +91,14 @@
 
         <div class="controls">
             <button onclick="getNewWish()">🧧 Nhận Lời Chúc</button>
-            <button id="music-btn" onclick="toggleMusic()">🎵 Sound</button>
+            <button id="music-btn" onclick="toggleMusic()">🎵 Nhạc Xuân</button>
             <button onclick="toggleTheme()">🌗 Giao Diện</button>
         </div>
     </div>
+
+    <audio id="bg-music" loop>
+        <source src="nhac-tet.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
         // 1. Đếm ngược
@@ -118,11 +117,11 @@
 
         // 2. Lời chúc
         const wishes = [
-            "Chúc mừng năm mới! Vạn sự như ý, tỷ sự như mơ!",
-            "Chúc bạn năm mới công việc hanh thông, học tập tiến tới!",
-            "Tết đến xuân về, chúc gia đình bạn luôn bình an!",
-            "Chúc bạn code không bug, mọi dự án đều thành công!",
-            "Năm mới phát tài, tiền vào như nước, tiền ra nhỏ giọt!"
+            "Chúc mừng năm mới! Vạn sự như ý!",
+            "Chúc bạn năm mới học tập tốt, code giỏi!",
+            "Tết đến xuân về, gia đình bình an!",
+            "Chúc bạn năm mới có thật nhiều niềm vui!",
+            "Phát tài phát lộc, vạn sự hanh thông!"
         ];
         function getNewWish() {
             const display = document.getElementById("wish-display");
@@ -130,36 +129,31 @@
             display.style.display = "block";
         }
 
-        // 3. Điều khiển nhạc YouTube
-        let isPlaying = false;
+        // 3. Nhạc MP3 chuẩn
+        const music = document.getElementById("bg-music");
         function toggleMusic() {
-            const player = document.getElementById("youtube-player");
-            const btn = document.getElementById("music-btn");
-            if (!isPlaying) {
-                player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-                btn.innerText = "🔇 Mute";
-                isPlaying = true;
+            if (music.paused) {
+                music.play();
+                document.getElementById("music-btn").innerText = "🔇 Tắt Nhạc";
             } else {
-                player.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-                btn.innerText = "🎵 Sound";
-                isPlaying = false;
+                music.pause();
+                document.getElementById("music-btn").innerText = "🎵 Nhạc Xuân";
             }
         }
 
         // 4. Giao diện & Hoa rơi
         function toggleTheme() { document.body.classList.toggle("dark-mode"); }
-
         function createPetal() {
             const petal = document.createElement('div');
             petal.className = 'petal';
             petal.innerText = Math.random() > 0.5 ? '🌸' : '🟡'; 
             petal.style.left = Math.random() * 100 + 'vw';
-            petal.style.animationDuration = Math.random() * 3 + 4 + 's';
+            petal.style.animationDuration = Math.random() * 2 + 3 + 's';
             petal.style.fontSize = Math.random() * 10 + 15 + 'px';
             document.body.appendChild(petal);
-            setTimeout(() => petal.remove(), 7000);
+            setTimeout(() => petal.remove(), 5000);
         }
-        setInterval(createPetal, 400);
+        setInterval(createPetal, 300);
     </script>
 </body>
 </html>
