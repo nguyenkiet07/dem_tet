@@ -4,72 +4,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đếm Ngược Tết Ất Tỵ 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: radial-gradient(circle, #ff4d4d, #b30000);
-            --text-color: white;
-            --box-bg: #fff;
-            --box-text: #b30000;
-            --accent-color: #ffd700;
+            /* Màu nền chính sang trọng hơn */
+            --bg-gradient: radial-gradient(circle at center, #d32f2f, #8e0000);
+            --text-color: #ffffff;
+            --accent-color: #ffd700; /* Màu vàng kim */
+            
+            /* Cấu hình cho hiệu ứng kính (Light mode) */
+            --glass-bg: rgba(0, 0, 0, 0.25);
+            --glass-border: rgba(255, 215, 0, 0.2);
+            --box-glass: rgba(255, 255, 255, 0.1);
         }
 
         .dark-mode {
-            --bg-color: radial-gradient(circle, #2c3e50, #000000);
-            --text-color: #ecf0f1;
-            --box-bg: #c0392b;
-            --box-text: #ffd700;
+            --bg-gradient: radial-gradient(circle at center, #2c3e50, #000000);
             --accent-color: #f1c40f;
+            /* Cấu hình kính tối hơn cho Dark mode */
+            --glass-bg: rgba(0, 0, 0, 0.5);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --box-glass: rgba(0, 0, 0, 0.3);
         }
 
         body {
             margin: 0; padding: 0;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: var(--bg-color);
+            font-family: 'Montserrat', sans-serif; /* Sử dụng font mới */
+            background: var(--bg-gradient);
             color: var(--text-color);
             display: flex; justify-content: center; align-items: center;
             min-height: 100vh; text-align: center;
             overflow: hidden; transition: background 0.5s ease;
         }
 
+        /* Container chính với hiệu ứng Glassmorphism */
         .container {
-            background: rgba(0, 0, 0, 0.4);
-            padding: 40px 20px; border-radius: 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-            border: 3px solid var(--accent-color);
+            background: var(--glass-bg);
+            /* Hiệu ứng mờ nền sau kính */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px); /* Cho Safari */
+            padding: 40px 30px;
+            border-radius: 25px;
+            /* Viền siêu mỏng tinh tế thay vì viền thô */
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3); /* Bóng đổ mềm và sâu */
             width: 90%; max-width: 550px;
             z-index: 10; position: relative;
         }
 
-        h1 { font-size: 2.2em; margin-bottom: 25px; color: var(--accent-color); }
-
-        #countdown { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; }
-
-        .time-box {
-            background: var(--box-bg); color: var(--box-text);
-            padding: 15px 10px; border-radius: 15px; flex: 1;
+        h1 {
+            font-size: 2.5em; font-weight: 800; margin-bottom: 30px;
+            color: var(--accent-color);
+            text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+            letter-spacing: 1px;
         }
 
-        .time-box span { display: block; font-size: 1.8em; font-weight: bold; }
-        .label { font-size: 0.75em; text-transform: uppercase; font-weight: bold; }
+        #countdown { display: flex; justify-content: center; gap: 15px; margin-bottom: 35px; }
 
-        .controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+        /* Các hộp thời gian con cũng là kính */
+        .time-box {
+            background: var(--box-glass);
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--glass-border);
+            padding: 15px 10px; border-radius: 15px; flex: 1;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .time-box:hover { transform: translateY(-5px); } /* Hiệu ứng nổi khi di chuột */
+
+        .time-box span { display: block; font-size: 2em; font-weight: 800; color: var(--accent-color); }
+        .label { font-size: 0.7em; text-transform: uppercase; font-weight: 600; margin-top: 5px; opacity: 0.9; }
+
+        .controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
 
         button {
-            padding: 12px 20px; border: none; border-radius: 50px;
-            cursor: pointer; font-weight: bold;
-            background: var(--accent-color); color: #b30000;
-            transition: all 0.2s;
+            padding: 12px 24px; border: none; border-radius: 50px;
+            cursor: pointer; font-weight: 600; font-family: 'Montserrat', sans-serif;
+            /* Gradient cho nút bấm */
+            background: linear-gradient(45deg, var(--accent-color), #ffecb3);
+            color: #8e0000;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            transition: all 0.3s ease;
         }
 
-        button:hover { transform: translateY(-3px); }
+        button:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5); }
+        .dark-mode button { color: #2c3e50; }
 
         #wish-display {
-            margin: 20px 0; padding: 15px; font-style: italic;
-            background: rgba(255, 255, 255, 0.15); border-radius: 10px; display: none;
+            margin: 25px 0; padding: 20px; font-style: italic; font-weight: 600;
+            background: rgba(255, 255, 255, 0.1); border-radius: 15px; display: none;
+            border-left: 4px solid var(--accent-color);
         }
 
         .petal {
-            position: fixed; top: -10%; z-index: 1;
+            position: fixed; top: -10%; z-index: 1; opacity: 0.8;
             user-select: none; animation: fall linear forwards;
         }
         @keyframes fall { to { transform: translateY(110vh) rotate(540deg); } }
@@ -117,23 +145,27 @@
 
         // 2. Lời chúc
         const wishes = [
-            "Chúc mừng năm mới! Vạn sự như ý!",
-            "Chúc bạn năm mới học tập tốt, code giỏi!",
-            "Tết đến xuân về, gia đình bình an!",
-            "Chúc bạn năm mới có thật nhiều niềm vui!",
-            "Phát tài phát lộc, vạn sự hanh thông!"
+            "Chúc mừng năm mới! Vạn sự như ý, tỷ sự như mơ!",
+            "Năm mới công việc hanh thông, code không bug!",
+            "Tết đến xuân về, gia đình bình an, hạnh phúc!",
+            "Chúc bạn một năm mới tràn đầy năng lượng và thành công!",
+            "Tiền vào như nước sông Đà, tiền ra nhỏ giọt như cà phê phin!"
         ];
         function getNewWish() {
             const display = document.getElementById("wish-display");
-            display.innerText = wishes[Math.floor(Math.random() * wishes.length)];
-            display.style.display = "block";
+            display.style.display = "none"; // Reset để tạo hiệu ứng hiện lại
+            setTimeout(() => {
+                display.innerText = wishes[Math.floor(Math.random() * wishes.length)];
+                display.style.display = "block";
+                display.style.animation = "fadeIn 0.5s ease";
+            }, 100);
         }
 
-        // 3. Nhạc MP3 chuẩn
+        // 3. Nhạc MP3
         const music = document.getElementById("bg-music");
         function toggleMusic() {
             if (music.paused) {
-                music.play();
+                music.play().catch(e => alert("Vui lòng tương tác với trang web trước khi bật nhạc!"));
                 document.getElementById("music-btn").innerText = "🔇 Tắt Nhạc";
             } else {
                 music.pause();
@@ -146,14 +178,16 @@
         function createPetal() {
             const petal = document.createElement('div');
             petal.className = 'petal';
-            petal.innerText = Math.random() > 0.5 ? '🌸' : '🟡'; 
+            // Thêm icon bao lì xì và lồng đèn cho phong phú
+            const icons = ['🌸', '🌼', '🧧', '🏮'];
+            petal.innerText = icons[Math.floor(Math.random() * icons.length)];
             petal.style.left = Math.random() * 100 + 'vw';
-            petal.style.animationDuration = Math.random() * 2 + 3 + 's';
-            petal.style.fontSize = Math.random() * 10 + 15 + 'px';
+            petal.style.animationDuration = Math.random() * 3 + 4 + 's';
+            petal.style.fontSize = Math.random() * 15 + 15 + 'px';
             document.body.appendChild(petal);
-            setTimeout(() => petal.remove(), 5000);
+            setTimeout(() => petal.remove(), 7000);
         }
-        setInterval(createPetal, 300);
+        setInterval(createPetal, 500);
     </script>
 </body>
 </html>
