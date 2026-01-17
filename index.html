@@ -31,14 +31,30 @@
         }
 
         body {
-            margin: 0; padding: 40px 0;
+            margin: 0; padding: 20px 0;
             font-family: 'Montserrat', sans-serif;
-            background: var(--bg-gradient);
+            /* HÌNH NỀN TẾT CHUYÊN NGHIỆP */
+            background-image: linear-gradient(rgba(142, 0, 0, 0.6), rgba(142, 0, 0, 0.6)), 
+                              url('https://img.pikbest.com/backgrounds/20220119/traditional-vietnam-lunar-new-year-red-background_6241013.jpg!bw700');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Giữ nền cố định khi cuộn */
+            background-repeat: no-repeat;
+            
             color: var(--text-color);
             display: flex; flex-direction: column;
-            align-items: center; justify-content: flex-start;
+            align-items: center; justify-content: center;
             min-height: 100vh; text-align: center;
             overflow-x: hidden; transition: background 0.5s ease;
+        }
+
+        /* Tối ưu các khối nội dung để nổi bật trên nền mới */
+        .container, .lottery-card {
+            background: rgba(0, 0, 0, 0.5); /* Tăng độ mờ nền đen để chữ rõ hơn */
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 215, 0, 0.3); /* Viền vàng sáng hơn */
+        }
         }
 
         .container {
