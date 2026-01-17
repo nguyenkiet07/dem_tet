@@ -123,13 +123,13 @@
         <div id="wish-display"></div>
         <div class="controls">
             <button onclick="getNewWish()">🧧 Lời Chúc</button>
-            <button id="music-btn" onclick="toggleMusic()">🎵 Nhạc Xuân</button>
-            <button onclick="toggleTheme()">🌗 Giao Diện</button>
+            <button id="music-btn" onclick="toggleMusic()">🎵 Nhạc</button>
+            <button onclick="toggleTheme()">🌗 Sáng/Tối</button>
         </div>
     </div>
 
     <div class="lottery-card">
-        <div class="lottery-title">✨ SỐ MAY MẮN TOÀN CẦU (10P/LẦN) ✨</div>
+        <div class="lottery-title">✨ XỔ SỐ MAI MẮN ✨</div>
         <div id="next-spin-timer">Đang tính toán...</div>
         <div class="slots">
             <div class="slot" id="slot-1">-</div>
@@ -137,9 +137,9 @@
             <div class="slot" id="slot-3">-</div>
             <div class="slot" id="slot-4">-</div>
         </div>
-        <div class="lottery-title" style="margin-top: 20px; font-size: 0.7em;">📜 LỊCH SỬ KẾT QUẢ (GIỜ VN)</div>
+        <div class="lottery-title" style="margin-top: 20px; font-size: 0.7em;">📜 LỊCH SỬ QUAY SỐ </div>
         <table class="history-table">
-            <thead><tr><th>Thời gian</th><th>Con số</th></tr></thead>
+            <thead><tr><th>PHIÊN</th><th>KẾT QUẢ</th></tr></thead>
             <tbody id="history-body"></tbody>
         </table>
     </div>
@@ -216,7 +216,7 @@
         checkAndSpin();
 
         // 3. Tiện ích
-        const wishes = ["Vạn sự như ý!", "Học tốt, code giỏi!", "Gia đình bình an!", "Năm mới bùng nổ!"];
+        const wishes = ["Vạn sự như ý!", "Tết đến xuân về, gia đình bình an, hạnh phúc và tài lộc!", "Gia đình bình an!", "Năm mới bùng nổ!", "Chúc Mừng Năm Mới"];
         function getNewWish() {
             const display = document.getElementById("wish-display");
             display.innerText = wishes[Math.floor(Math.random() * wishes.length)];
